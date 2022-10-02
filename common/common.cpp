@@ -413,7 +413,7 @@ uint64_t GetMicroSecond()
 bool SystemExec(const char *szFormatCmd, ...)
 {
 	PARSEVALIST(szFormatCmd, szCmd)
-
+/*
 	if (strlen(szCmd) <= 0)
 	{
 		return false;
@@ -447,6 +447,7 @@ bool SystemExec(const char *szFormatCmd, ...)
 		}
 #endif
 	}
+ */
 	return false;
 }
 
@@ -594,11 +595,10 @@ bool SHASumFile(const char *szFile, string &strSHA1, string &strSHA256)
 	size_t sSize = 0;
 	uint8_t *pBase = (uint8_t *)MapFile(szFile, 0, 0, &sSize, true);
 
-	SHASum(E_SHASUM_TYPE_1, pBase, sSize, strSHA1);
-	SHASum(E_SHASUM_TYPE_256, pBase, sSize, strSHA256);
-
 	if (NULL != pBase && sSize > 0)
 	{
+        SHASum(E_SHASUM_TYPE_1, pBase, sSize, strSHA1);
+        SHASum(E_SHASUM_TYPE_256, pBase, sSize, strSHA256);
 		munmap(pBase, sSize);
 	}
 	return (!strSHA1.empty() && !strSHA256.empty());
