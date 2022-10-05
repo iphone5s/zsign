@@ -25,7 +25,7 @@ private:
 private:
 	bool GenerateCodeResources(const string &strFolder, JValue &jvCodeRes);
 	void GetFolderFiles(const string &strFolder, const string &strBaseFolder, set<string> &setFiles);
-
+    bool isMachO(const string &strFilePath);
 private:
 	bool m_bForceSign;
 	bool m_bWeakInject;

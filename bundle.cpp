@@ -132,7 +132,7 @@ bool ZAppBundle::GetObjectsToSign(const string &strFolder, JValue &jvInfo)
 				}
 				else if (DT_REG == ptr->d_type)
 				{
-					if (IsPathSuffix(strNode, ".dylib"))
+                    if (isMachO(strNode))
 					{
 						jvInfo["files"].push_back(strNode.substr(m_strAppFolder.size() + 1));
 					}
@@ -143,6 +143,31 @@ bool ZAppBundle::GetObjectsToSign(const string &strFolder, JValue &jvInfo)
 		closedir(dir);
 	}
 	return true;
+}
+
+bool ZAppBundle::isMachO(const string &strFilePath)
+{
+    FILE *binary = fopen(strFilePath.c_str(), "r");
+    if (binary != NULL) {
+        uint32_t magic;
+        size_t result = fread(&magic, sizeof(uint32_t), 1, binary);
+        fclose(binary);
+        if(1 == result)
+        {
+            if (magic == FAT_MAGIC || magic == FAT_CIGAM || magic == MH_MAGIC || magic == MH_CIGAM || magic == MH_MAGIC_64 || magic == MH_CIGAM_64) {
+                ZMachO macho;
+                if (!macho.Init(strFilePath.c_str()))
+                {
+                    return false;
+                }
+                if (!macho.isCanSign()) {
+                    return false;
+                }
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 void ZAppBundle::GetFolderFiles(const string &strFolder, const string &strBaseFolder, set<string> &setFiles)
