@@ -321,15 +321,6 @@ bool ZMachO::isCanSign()
         if (archo->m_pSignBase == NULL) {
             return false;
         }
-        if(archo->IsExecute())
-        {
-            NSString *strPath = [[NSString alloc]initWithUTF8String:m_strFile.c_str()];
-            strPath = [[strPath stringByDeletingLastPathComponent]stringByAppendingPathComponent:@"Info.plist"];
-            if(![[NSFileManager defaultManager] fileExistsAtPath:strPath])
-            {
-                return false;
-            }
-        }
     }
     
     return true;
