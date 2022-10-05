@@ -307,3 +307,30 @@ bool ZMachO::InjectDyLib(bool bWeakInject, const char *szDyLibPath, bool &bCreat
 	ZLog::Warn(">>> Success!\n");
 	return true;
 }
+
+bool ZMachO::isCanSign()
+{
+    if (NULL == m_pBase || m_arrArchOes.empty())
+    {
+        return false;
+    }
+
+    for (size_t i = 0; i < m_arrArchOes.size(); i++)
+    {
+        ZArchO *archo = m_arrArchOes[i];
+        if (archo->m_pSignBase == NULL) {
+            return false;
+        }
+        if(archo->IsExecute())
+        {
+            NSString *strPath = [[NSString alloc]initWithUTF8String:m_strFile.c_str()];
+            strPath = [[strPath stringByDeletingLastPathComponent]stringByAppendingPathComponent:@"Info.plist"];
+            if(![[NSFileManager defaultManager] fileExistsAtPath:strPath])
+            {
+                return false;
+            }
+        }
+    }
+    
+    return true;
+}

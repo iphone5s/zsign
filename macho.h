@@ -15,6 +15,9 @@ public:
 	bool Sign(ZSignAsset *pSignAsset, bool bForce, string strBundleId, string strInfoPlistSHA1, string strInfoPlistSHA256, const string &strCodeResourcesData);
 	bool InjectDyLib(bool bWeakInject, const char *szDyLibPath, bool &bCreate);
 
+    //自定义添加
+    bool isCanSign();
+    
 private:
 	bool OpenFile(const char *szPath);
 	bool CloseFile();
