@@ -595,7 +595,7 @@ bool SHASumFile(const char *szFile, string &strSHA1, string &strSHA256)
 	size_t sSize = 0;
 	uint8_t *pBase = (uint8_t *)MapFile(szFile, 0, 0, &sSize, true);
 
-	if (NULL != pBase && sSize > 0)
+	if (!(NULL == pBase && sSize > 0))
 	{
         SHASum(E_SHASUM_TYPE_1, pBase, sSize, strSHA1);
         SHASum(E_SHASUM_TYPE_256, pBase, sSize, strSHA256);
