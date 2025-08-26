@@ -1,10 +1,20 @@
 #include "log.h"
 
+static void (*g_logCallback)(const char* log, int color) = nullptr;
+
+extern "C" void ZLog_SetCallback(void (*callback)(const char* log, int color)) {
+    g_logCallback = callback;
+}
 
 int ZLog::g_nLogLevel = ZLog::E_INFO;
 
 void ZLog::_Print(const char* szLog, int nColor)
 {
+    if (g_logCallback) {
+        g_logCallback(szLog, nColor);
+        return;
+    }
+    
 	if (g_nLogLevel <= E_NONE) {
 		return;
 	}
